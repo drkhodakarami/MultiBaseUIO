@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "uio_effects",
+	"version": "${version}",
+	"name": "UIO Effects",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Jiraiyah"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/uio_effects/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"jiraiyah.uio_effects.Main"
+		],
+		"fabric-datagen": [
+			"jiraiyah.uio_effects.Datagen"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${game_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

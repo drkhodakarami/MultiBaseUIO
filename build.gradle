@@ -1,0 +1,80 @@
+plugins {
+    id 'fabric-loom' version '1.9-SNAPSHOT'
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    repositories {
+        maven { url 'https://maven.fabricmc.net/' }
+		maven {
+			url "https://cursemaven.com"
+			content {
+				includeGroup "curse.maven"
+			}
+		}
+		maven { url = "https://api.modrinth.com/maven" }
+        mavenCentral()
+		maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
+    }
+}
+
+subprojects {
+    // Apply Fabric and Minecraft dependencies for each subproject
+    dependencies {
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
+		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+		
+		modImplementation include("jiraiyah.logger:jilogger:${jilogger_version}")
+		modImplementation include("jiraiyah.reference:jireference:${jireference_version}")
+		modImplementation include("jiraiyah.config:jiconfig:${jiconfig_version}")
+		modImplementation include("jiraiyah.register:jiregister:${jiregister_version}")
+    }
+
+    // Customize the subproject build tasks if necessary
+    tasks {
+        compileJava {
+            options.encoding = 'UTF-8'
+        }
+    }
+}
+
+task buildFinalModJar {
+    dependsOn subprojects.jar  // Ensures all subprojects are built first
+    
+    doLast {
+        def finalJar = new File(buildDir, "libs/${rootProject.name}-${version}.jar")
+        def finalJarTempDir = new File(buildDir, "tempJar")
+
+        finalJarTempDir.mkdirs()
+
+        subprojects.each { subproject ->
+            def subprojectJar = new File(subproject.buildDir, "libs/${subproject.name}-${subproject.version}.jar")
+            if (subprojectJar.exists()) {
+                copy {
+                    from subprojectJar
+                    into finalJarTempDir
+                }
+            }
+        }
+
+        // Create the final jar that contains all subprojects' jars
+        ant.zip(destfile: finalJar, basedir: finalJarTempDir)
+        
+        // Clean up temporary directory
+        fileTree(finalJarTempDir).each { it.delete() }
+    }
+}

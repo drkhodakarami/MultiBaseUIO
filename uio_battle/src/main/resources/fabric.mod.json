@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "uio_battle",
+	"version": "${version}",
+	"name": "UIO Battle",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Jiraiyah"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/uio_battle/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"jiraiyah.uio_battle.Main"
+		],
+		"fabric-datagen": [
+			"jiraiyah.uio_battle.Datagen"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${game_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

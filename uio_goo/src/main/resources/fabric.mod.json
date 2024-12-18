@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "uio_goo",
+	"version": "${version}",
+	"name": "UIO Goo",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Jiraiyah"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/uio_goo/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"jiraiyah.uio_goo.Main"
+		],
+		"fabric-datagen": [
+			"jiraiyah.uio_goo.Datagen"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${game_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

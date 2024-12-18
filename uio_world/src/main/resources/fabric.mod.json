@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "uio_world",
+	"version": "${version}",
+	"name": "UIO World",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Jiraiyah"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/uio_world/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"jiraiyah.uio_world.Main"
+		],
+		"fabric-datagen": [
+			"jiraiyah.uio_world.Datagen"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${game_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

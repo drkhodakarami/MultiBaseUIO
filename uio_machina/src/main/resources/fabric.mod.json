@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "uio_machina",
+	"version": "${version}",
+	"name": "UIO Machina",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Jiraiyah"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/uio_machina/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"jiraiyah.uio_machina.Main"
+		],
+		"fabric-datagen": [
+			"jiraiyah.uio_machina.Datagen"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${game_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

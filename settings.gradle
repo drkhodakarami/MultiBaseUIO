@@ -1,0 +1,15 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+		maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
+	}
+}
+
+rootProject.name = 'my-fabric-mod'
+
+include 'uio_base', 'uio_battle', 'uio_cable', 'uio_commands', 'uio_decoration', 'uio_effects', 'uio_goo', 'uio_machina', 'uio_ore', 'uio_tools', 'uio_world'

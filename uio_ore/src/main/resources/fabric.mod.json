@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "uio_ore",
+	"version": "${version}",
+	"name": "UIO Ore",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Jiraiyah"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT",
+	"icon": "assets/uio_ore/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"jiraiyah.uio_ore.Main"
+		],
+		"fabric-datagen": [
+			"jiraiyah.uio_ore.Datagen"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${game_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
