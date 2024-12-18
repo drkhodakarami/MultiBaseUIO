@@ -12,4 +12,14 @@ pluginManagement {
 
 rootProject.name = 'my-fabric-mod'
 
-include 'uio_base', 'uio_battle', 'uio_cable', 'uio_commands', 'uio_decoration', 'uio_effects', 'uio_goo', 'uio_machina', 'uio_ore', 'uio_tools', 'uio_world'
+include 'uio_base'
+include 'uio_battle'
+include 'uio_cable'
+include 'uio_commands'
+include 'uio_decoration'
+include 'uio_effects'
+include 'uio_goo'
+include 'uio_machina'
+include 'uio_ore'
+include 'uio_tools'
+include 'uio_world'

@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,12 +11,20 @@ base {
 }
 
 repositories {
+
+}
+
+fabricApi {
+	configureDataGeneration {
+		client = true
+	}
 }
 
 allprojects {
     apply plugin: 'java'
 
     repositories {
+        mavenCentral()
         maven { url 'https://maven.fabricmc.net/' }
 		maven {
 			url "https://cursemaven.com"
@@ -25,13 +33,11 @@ allprojects {
 			}
 		}
 		maven { url = "https://api.modrinth.com/maven" }
-        mavenCentral()
 		maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
     }
 }
 
 subprojects {
-    // Apply Fabric and Minecraft dependencies for each subproject
     dependencies {
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -52,29 +58,62 @@ subprojects {
     }
 }
 
-task buildFinalModJar {
-    dependsOn subprojects.jar  // Ensures all subprojects are built first
-    
-    doLast {
-        def finalJar = new File(buildDir, "libs/${rootProject.name}-${version}.jar")
-        def finalJarTempDir = new File(buildDir, "tempJar")
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	
+	implementation project(path:":uio_base", configuration: "namedElements")
+	implementation project(path:":uio_battle", configuration: "namedElements")
+	implementation project(path:":uio_cable", configuration: "namedElements")
+	implementation project(path:":uio_commands", configuration: "namedElements")
+	implementation project(path:":uio_decoration", configuration: "namedElements")
+	implementation project(path:":uio_effects", configuration: "namedElements")
+	implementation project(path:":uio_goo", configuration: "namedElements")
+	implementation project(path:":uio_machina", configuration: "namedElements")
+	implementation project(path:":uio_ore", configuration: "namedElements")
+	implementation project(path:":uio_tools", configuration: "namedElements")
+	implementation project(path:":uio_world", configuration: "namedElements")
+}
 
-        finalJarTempDir.mkdirs()
+processResources {
+	inputs.property "version", project.version
+	inputs.property "loader_version", project.loader_version
+	inputs.property "game_version", project.minecraft_version
 
-        subprojects.each { subproject ->
-            def subprojectJar = new File(subproject.buildDir, "libs/${subproject.name}-${subproject.version}.jar")
-            if (subprojectJar.exists()) {
-                copy {
-                    from subprojectJar
-                    into finalJarTempDir
-                }
-            }
-        }
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+		expand "loader_version": project.loader_version
+		expand "game_version": project.minecraft_version
+	}
+}
 
-        // Create the final jar that contains all subprojects' jars
-        ant.zip(destfile: finalJar, basedir: finalJarTempDir)
-        
-        // Clean up temporary directory
-        fileTree(finalJarTempDir).each { it.delete() }
-    }
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${rootProject.base.archivesName.get()}"}
+	}
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = rootProject.archives_base_name
+			from components.java
+		}
+	}
+
+	repositories {
+	}
 }
