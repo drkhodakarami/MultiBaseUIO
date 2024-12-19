@@ -11,7 +11,16 @@ base {
 }
 
 repositories {
-
+	mavenCentral()
+	maven { url 'https://maven.fabricmc.net/' }
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
+	maven { url = "https://api.modrinth.com/maven" }
+	maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
 }
 
 fabricApi {
@@ -23,9 +32,17 @@ fabricApi {
 allprojects {
     apply plugin: 'java'
 
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.fabricmc.net/' }
+    tasks {
+        compileJava {
+            options.encoding = 'UTF-8'
+        }
+    }
+}
+
+subprojects {
+	repositories {
+		mavenCentral()
+		maven { url 'https://maven.fabricmc.net/' }
 		maven {
 			url "https://cursemaven.com"
 			content {
@@ -34,40 +51,14 @@ allprojects {
 		}
 		maven { url = "https://api.modrinth.com/maven" }
 		maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
-    }
-}
+	}
 
-subprojects {
-    dependencies {
-        minecraft "com.mojang:minecraft:${project.minecraft_version}"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-		
+	dependencies {
 		modImplementation include("jiraiyah.logger:jilogger:${jilogger_version}")
 		modImplementation include("jiraiyah.reference:jireference:${jireference_version}")
 		modImplementation include("jiraiyah.config:jiconfig:${jiconfig_version}")
 		modImplementation include("jiraiyah.register:jiregister:${jiregister_version}")
-    }
-
-    // Customize the subproject build tasks if necessary
-    tasks {
-        compileJava {
-            options.encoding = 'UTF-8'
-        }
-    }
-	
-	processResources {
-		inputs.property "version", project.version
-		inputs.property "loader_version", project.loader_version
-		inputs.property "game_version", project.minecraft_version
-
-		filesMatching("fabric.mod.json") {
-			expand "version": project.version
-			expand "loader_version": project.loader_version
-			expand "game_version": project.minecraft_version
-		}
-}
+	}
 }
 
 dependencies {
@@ -75,7 +66,12 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+
+	modImplementation include("jiraiyah.logger:jilogger:${jilogger_version}")
+	modImplementation include("jiraiyah.reference:jireference:${jireference_version}")
+	modImplementation include("jiraiyah.config:jiconfig:${jiconfig_version}")
+	modImplementation include("jiraiyah.register:jiregister:${jiregister_version}")
+
 	implementation project(path:":uio_base", configuration: "namedElements")
 	implementation project(path:":uio_battle", configuration: "namedElements")
 	implementation project(path:":uio_cable", configuration: "namedElements")
@@ -101,31 +97,14 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
-}
+//publishing {
+//	publications {
+//		create("mavenJava", MavenPublication) {
+//			artifactId = rootProject.archives_base_name
+//			from components.java
+//		}
+//	}
 
-java {
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
-jar {
-	from("LICENSE") {
-		rename { "${it}_${rootProject.base.archivesName.get()}"}
-	}
-}
-
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = rootProject.archives_base_name
-			from components.java
-		}
-	}
-
-	repositories {
-	}
-}
+//	repositories {
+//	}
+//}
