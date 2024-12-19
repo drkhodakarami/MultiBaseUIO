@@ -6,21 +6,13 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
-base {
-	archivesName = project.archives_base_name
+ext{
+	loader_version = project.loader_version
+	minecraft_version = project.minecraft_version
 }
 
-repositories {
-	mavenCentral()
-	maven { url 'https://maven.fabricmc.net/' }
-	maven {
-		url "https://cursemaven.com"
-		content {
-			includeGroup "curse.maven"
-		}
-	}
-	maven { url = "https://api.modrinth.com/maven" }
-	maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
+base {
+	archivesName = project.archives_base_name
 }
 
 fabricApi {
@@ -30,16 +22,8 @@ fabricApi {
 }
 
 allprojects {
-    apply plugin: 'java'
+	apply plugin: 'java'
 
-    tasks {
-        compileJava {
-            options.encoding = 'UTF-8'
-        }
-    }
-}
-
-subprojects {
 	repositories {
 		mavenCentral()
 		maven { url 'https://maven.fabricmc.net/' }
@@ -53,11 +37,61 @@ subprojects {
 		maven { url 'https://repo.repsy.io/mvn/jiraiyah/jilibs' }
 	}
 
+	tasks {
+		compileJava {
+			options.encoding = 'UTF-8'
+		}
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.release = 21
+	}
+
+	java {
+		withSourcesJar()
+
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+}
+
+subprojects {
+	apply plugin: 'fabric-loom'
+
+	fabricApi {
+		configureDataGeneration {
+			client = true
+		}
+	}
+
 	dependencies {
-		modImplementation include("jiraiyah.logger:jilogger:${jilogger_version}")
-		modImplementation include("jiraiyah.reference:jireference:${jireference_version}")
-		modImplementation include("jiraiyah.config:jiconfig:${jiconfig_version}")
-		modImplementation include("jiraiyah.register:jiregister:${jiregister_version}")
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
+		modImplementation "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+		modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
+
+		modImplementation include("jiraiyah.logger:jilogger:${rootProject.jilogger_version}")
+		modImplementation include("jiraiyah.reference:jireference:${rootProject.jireference_version}")
+		modImplementation include("jiraiyah.config:jiconfig:${rootProject.jiconfig_version}")
+		modImplementation include("jiraiyah.register:jiregister:${rootProject.jiregister_version}")
+	}
+
+	jar {
+		from("LICENSE") {
+			rename { "${it}_${rootProject.base.archivesName.get()}"}
+		}
+	}
+
+	processResources {
+		inputs.property "version", rootProject.version
+		inputs.property "loader_version", rootProject.loader_version
+		inputs.property "game_version", rootProject.minecraft_version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": rootProject.version
+			expand "loader_version": rootProject.loader_version
+			expand "game_version": rootProject.minecraft_version
+		}
 	}
 }
 
@@ -68,9 +102,6 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation include("jiraiyah.logger:jilogger:${jilogger_version}")
-	modImplementation include("jiraiyah.reference:jireference:${jireference_version}")
-	modImplementation include("jiraiyah.config:jiconfig:${jiconfig_version}")
-	modImplementation include("jiraiyah.register:jiregister:${jiregister_version}")
 
 	implementation project(path:":uio_base", configuration: "namedElements")
 	implementation project(path:":uio_battle", configuration: "namedElements")
@@ -85,6 +116,12 @@ dependencies {
 	implementation project(path:":uio_world", configuration: "namedElements")
 }
 
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+}
+
 processResources {
 	inputs.property "version", project.version
 	inputs.property "loader_version", project.loader_version
@@ -96,15 +133,3 @@ processResources {
 		expand "game_version": project.minecraft_version
 	}
 }
-
-//publishing {
-//	publications {
-//		create("mavenJava", MavenPublication) {
-//			artifactId = rootProject.archives_base_name
-//			from components.java
-//		}
-//	}
-
-//	repositories {
-//	}
-//}

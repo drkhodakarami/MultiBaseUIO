@@ -1,15 +1,17 @@
-package com.example;
+package jiraiyah.uio;
 
+import jiraiyah.logger.Logger;
 import net.fabricmc.api.ModInitializer;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main implements ModInitializer {
-	public static final String MOD_ID = "uio";
+	public static final String ModID = "ultraio";
+	public static final jiraiyah.logger.Logger LOGGER = new Logger(ModID);
 
 	@Override
-	public void onInitialize() 
+	public void onInitialize()
 	{
+		LOGGER.logMain();
 	}
 }
