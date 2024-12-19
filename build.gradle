@@ -6,10 +6,6 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
-ext{
-	loader_version = project.loader_version
-	minecraft_version = project.minecraft_version
-}
 
 base {
 	archivesName = project.archives_base_name
@@ -53,6 +49,18 @@ allprojects {
 		sourceCompatibility = JavaVersion.VERSION_21
 		targetCompatibility = JavaVersion.VERSION_21
 	}
+
+	processResources {
+		inputs.property "version", project.version
+		inputs.property "loader_version", rootProject.loader_version
+		inputs.property "game_version", rootProject.minecraft_version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": project.version,
+					"loader_version": rootProject.loader_version,
+					"game_version": rootProject.minecraft_version
+		}
+	}
 }
 
 subprojects {
@@ -82,17 +90,17 @@ subprojects {
 		}
 	}
 
-	processResources {
-		inputs.property "version", rootProject.version
-		inputs.property "loader_version", rootProject.loader_version
-		inputs.property "game_version", rootProject.minecraft_version
+	//processResources {
+	//	inputs.property "version", rootProject.version
+	//	inputs.property "loader_version", rootProject.loader_version
+	//	inputs.property "game_version", rootProject.minecraft_version
 
-		filesMatching("fabric.mod.json") {
-			expand "version": rootProject.version
-			expand "loader_version": rootProject.loader_version
-			expand "game_version": rootProject.minecraft_version
-		}
-	}
+	//	filesMatching("fabric.mod.json") {
+	//		expand "version": rootProject.version
+	//		expand "loader_version": rootProject.loader_version
+	//		expand "game_version": rootProject.minecraft_version
+	//	}
+	//}
 }
 
 dependencies {
@@ -119,17 +127,5 @@ dependencies {
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
-	}
-}
-
-processResources {
-	inputs.property "version", project.version
-	inputs.property "loader_version", project.loader_version
-	inputs.property "game_version", project.minecraft_version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-		expand "loader_version": project.loader_version
-		expand "game_version": project.minecraft_version
 	}
 }

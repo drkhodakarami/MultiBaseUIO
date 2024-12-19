@@ -3,11 +3,9 @@ package jiraiyah.uio;
 import jiraiyah.logger.Logger;
 import net.fabricmc.api.ModInitializer;
 
-import org.slf4j.LoggerFactory;
-
 public class Main implements ModInitializer {
 	public static final String ModID = "ultraio";
-	public static final jiraiyah.logger.Logger LOGGER = new Logger(ModID);
+	public static final Logger LOGGER = new Logger(ModID);
 
 	@Override
 	public void onInitialize()

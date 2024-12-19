@@ -10,7 +10,7 @@ pluginManagement {
 	}
 }
 
-rootProject.name = 'my-fabric-mod'
+rootProject.name = 'ultra-io-mod'
 
 include 'uio_base'
 include 'uio_battle'

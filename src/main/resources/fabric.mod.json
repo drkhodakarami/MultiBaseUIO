@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "uio_world",
+	"id": "uio",
 	"version": "${version}",
-	"name": "UIO World",
+	"name": "UIO",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
 		"Jiraiyah"
@@ -12,11 +12,11 @@
 		"sources": ""
 	},
 	"license": "MIT",
-	"icon": "assets/uio_world/icon.png",
+	"icon": "assets/uio/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"jiraiyah.uio_world.Main"
+			"jiraiyah.uio.Main"
 		]
 	},
 	"depends": {
